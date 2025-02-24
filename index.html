@@ -6,168 +6,165 @@
     <title>丰川极速文搜</title>
     
     <!-- PWA 相关 -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/tgw-search/manifest.json">
     <meta name="theme-color" content="#4CAF50">
     
     <!-- 各种尺寸的图标 -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="icon" type="image/x-icon" href="/tgw-search/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/tgw-search/icon-16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/tgw-search/icon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/tgw-search/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/tgw-search/icon-512.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <style>
+        /* 基础变量设置 */
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --background-color: #f5f5f5;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --hover-color: #f8f8f8;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --category-header: #f9f9f9;
+            --grid-columns-mobile: 2;
+            --grid-columns-tablet: 3;
+            --grid-columns-desktop: 4;
+            --grid-columns-large: 5;
+            --item-min-width: 140px;
+            --spacing-unit: 8px;
+        }
+
+        /* 基础样式 */
         body {
-            font-family: system-ui, sans-serif;
-            max-width: 800px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 16px;
-            background: #f5f5f5;
-        }
-        .container {
-            background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--background-color);
+            color: var(--text-color);
         }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+
+        /* 在现有样式中添加或更新以下内容 */
+        :root {
+            --grid-columns-mobile: 2;
+            --grid-columns-tablet: 3;
+            --grid-columns-desktop: 4;
+            --grid-columns-large: 5;
+            --item-min-width: 140px;
+            --spacing-unit: 8px;
         }
-        .search-box {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        .category {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-        }
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .category-title {
-            font-weight: bold;
-            color: #444;
-            font-size: 16px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .site-checkbox {
-            width: 16px;
-            height: 16px;
-            margin: 0;
-            cursor: pointer;
-        }
-        .batch-open {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .batch-open:hover {
-            background: #45a049;
-        }
+        
         .link-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
+            gap: var(--spacing-unit);
+            padding: var(--spacing-unit);
         }
-        .custom-site-item {
-            background: #f0f0f0;
-            padding: 8px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .search-link {
-            flex: 1;
-            text-decoration: none;
-            color: #333;
-            text-align: center;
-            font-size: 14px;
-        }
-        .search-link:hover {
-            color: #4CAF50;
-        }
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            display: none;
-        }
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .delete-btn:hover {
-            background: #c82333;
-        }
-        @media (max-width: 600px) {
+        
+        /* 移动端（小于768px） */
+        @media (max-width: 767px) {
+            body {
+                padding: var(--spacing-unit);
+            }
+        
+            .container {
+                padding: var(--spacing-unit);
+            }
+        
             .link-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                grid-template-columns: repeat(var(--grid-columns-mobile), 1fr);
             }
+        
+            .category-header {
+                flex-direction: column;
+                gap: var(--spacing-unit);
+            }
+        
+            .header-actions {
+                flex-wrap: wrap;
+                gap: var(--spacing-unit);
+            }
+        
+            .custom-site-item {
+                padding: var(--spacing-unit);
+            }
+        
             .search-link {
-                font-size: 13px;
+                font-size: 14px;
+            }
+        
+            .batch-open {
+                width: 100%;
+                margin-top: var(--spacing-unit);
             }
         }
+        
+        /* 平板（768px - 1023px） */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .link-grid {
+                grid-template-columns: repeat(var(--grid-columns-tablet), 1fr);
+            }
+        }
+        
+        /* 桌面端（1024px - 1439px） */
+        @media (min-width: 1024px) and (max-width: 1439px) {
+            .link-grid {
+                grid-template-columns: repeat(var(--grid-columns-desktop), 1fr);
+            }
+        }
+        
+        /* 大屏幕（1440px及以上） */
+        @media (min-width: 1440px) {
+            .link-grid {
+                grid-template-columns: repeat(var(--grid-columns-large), 1fr);
+            }
+        }
+        
+        /* 触摸设备优化 */
+        @media (hover: none) {
+            .custom-site-item {
+                padding: calc(var(--spacing-unit) * 1.5);
+            }
+        
+            .site-checkbox {
+                min-width: 24px;
+                min-height: 24px;
+            }
+        
+            .batch-open {
+                padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+            }
+        }
+        
+        /* 确保在任何设备上的最小点击区域 */
+        .custom-site-item {
+            min-height: 44px;
+        }
+        
+        .search-link, .batch-open, .delete-btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* 优化加载性能 */
+        .custom-site-item {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        
+        /* 优化动画性能 */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
     </style>
+
 </head>
 <body>
     <div class="container">
