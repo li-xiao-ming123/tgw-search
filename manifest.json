@@ -1,7 +1,7 @@
 {
     "name": "丰川极速文搜",
-    "short_name": "TGWSearch",
-    "description": "丰川集团出品",
+    "short_name": "TGWGroup",
+    "description": "丰川集团内部工具",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",
