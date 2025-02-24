@@ -1,6 +1,6 @@
 {
     "name": "丰川极速文搜",
-    "short_name": "TGWGroup",
+    "short_name": "TGWSearch",
     "description": "丰川集团内部工具",
     "start_url": ".",
     "display": "standalone",
@@ -8,12 +8,12 @@
     "theme_color": "#4CAF50",
     "icons": [
         {
-            "src": "icon-192.png",
+            "src": "/tgw-search/icon-192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "icon-512.png",
+            "src": "/tgw-search/icon-512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
