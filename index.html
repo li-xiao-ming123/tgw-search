@@ -97,6 +97,47 @@
             border-radius: 4px;
             display: none;
         }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .custom-site-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
         @media (max-width: 600px) {
             .link-grid {
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -152,9 +193,30 @@
             </div>
             <div class="link-grid" id="traditionalLinks"></div>
         </div>
+
+        <div class="category">
+            <div class="category-header">
+                <div class="category-title">自定义搜索源</div>
+                <button class="batch-open" onclick="addCustomSite()">添加网站</button>
+            </div>
+            <div class="link-grid" id="customLinks"></div>
+        </div>
     </div>
 
     <div id="notification" class="notification"></div>
+
+    <!-- 添加自定义搜索源的弹窗 -->
+    <div id="customSiteModal" class="modal">
+        <div class="modal-content">
+            <h3>添加自定义搜索源</h3>
+            <input type="text" id="siteName" placeholder="网站名称" class="search-box">
+            <input type="text" id="siteUrl" placeholder="搜索URL（使用 {q} 表示搜索词）" class="search-box">
+            <div class="modal-buttons">
+                <button onclick="saveCustomSite()" class="batch-open">保存</button>
+                <button onclick="closeModal()" class="batch-open" style="background: #666;">取消</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const defaultSites = [
@@ -165,7 +227,7 @@
             {name: 'Bing', url: 'https://cn.bing.com/search?q={q}'},
             {name: '词典论坛', url: 'https://forum.freemdict.com/search?q={q}'},
             {name: 'Panso', url: 'https://panso.pro/search?q={q}'},
-            {name: '度盘搜索', url: 'https://pan666.net/?q={q}'},
+            {name: '阿里小站', url: 'https://pan666.net/?q={q}'},
             {name: '读秀', url: 'https://book.duxiu.com/search?sw={q}'},
             {name: '鸠摩搜书', url: 'https://www.jiumodiary.com'},
             {name: "Anna's Archive", url: 'https://annas-archive.org/search?q={q}'},
@@ -176,9 +238,12 @@
         const generalSites = [
             {name: 'Gutenberg', url: 'https://www.gutenberg.org/ebooks/search/?query={q}'},
             {name: 'Wislib', url: 'https://www.wislib.com/search?key={q}'},
-            {name: '白嫖图书馆', url: 'https://bk.hallowlib.org'},
+            {name: 'Hallowlib', url: 'https://bk.hallowlib.org'},
             {name: '小白盘', url: 'https://www.xiaobaipan.com/list-{q}AD.html'},
-            {name: '虫部落', url: 'https://www.google.com/search?sitesearch=chongbuluo.com&query={q}'}
+            {name: '虫部落', url: 'https://www.google.com/search?sitesearch=chongbuluo.com&query={q}'},
+            {name: 'tstrs', url: 'https://book.tstrs.me/search'},
+            {name: 'Proletarian', url: 'https://library.proletarian.me/searchResult.php?query={q}'},
+            {name: 'LOC', url: 'https://www.loc.gov/search/?in=partof%3Aworld+digital+library&q={q}'}
         ];
 
         const researchSites = [
@@ -187,16 +252,26 @@
             {name: '百度学术', url: 'https://xueshu.baidu.com/s?wd={q}'},
             {name: 'CNKI', url: 'https://www.cnki.net/search.aspx?q={q}'},
             {name: 'Sci-Hub', url: 'https://sci-hub.box'},
-            {name: '公众学术', url: 'https://pubscholar.cn'}
+            {name: '公众学术', url: 'https://pubscholar.cn'},
+            {name: '台湾电子书', url: 'https://taebc.ebook.hyread.com.tw/searchList.jsp?search_field=FullText&search_input={q}'},
+            {name: 'NAP', url: 'https://nap.nationalacademies.org'},
+            {name: 'NCPSSD', url: 'https://www.ncpssd.org'},
+            {name: 'UCDRS', url: 'http://www.ucdrs.cn'},
+            {name: 'Marxists', url: 'https://www.marxists.org/chinese/index.html'},
+            {name: 'NAP.edu', url: 'https://www.nap.edu'},
+            {name: 'MIT OCW', url: 'https://ocw.mit.edu/search/?q={q}'}
         ];
 
         const englishSites = [
-            {name: 'Google(EN)', url: 'https://www.google.com/search?q={q}&lr=lang_en'},
-            {name: 'Z-Library', url: 'https://z-library.sk/s/{q}'},
-            {name: 'LibGen', url: 'http://libgen.li/index.php?req={q}'},
-            {name: "Anna's Archive", url: 'https://annas-archive.org/search?q={q}'},
             {name: 'PDF Drive', url: 'https://www.pdfdrive.com/search?q={q}'},
-            {name: 'Springer', url: 'https://link.springer.com/search?query={q}'}
+            {name: 'Springer', url: 'https://link.springer.com/search?query={q}'},
+            {name: 'iHeart', url: 'https://iheartintelligence.com/free-books-100-legal-sites-download-literature'},
+            {name: 'BL Blogs', url: 'https://www.bl.uk/research/blogs'},
+            {name: 'PALMM', url: 'https://palmm.digital.flvc.org'},
+            {name: 'OAPEN', url: 'https://library.oapen.org/discover?query={q}'},
+            {name: 'MagazineLib', url: 'https://magazinelib.com/?s={q}'},
+            {name: 'ICPSR', url: 'https://www.icpsr.umich.edu/web/ICPSR/search/studies?q={q}'},
+            {name: 'FreePDFMag', url: 'https://www.freepdfmagazine.com'}
         ];
 
         const traditionalSites = [
@@ -204,8 +279,12 @@
             {name: '书格', url: 'https://www.shuge.org/?s={q}'},
             {name: '国学导航', url: 'http://guoxue.er07.com'},
             {name: '台大图书馆', url: 'https://ntu.primo.exlibrisgroup.com/discovery/search?query=any,contains,{q}'},
-            {name: '好读', url: 'http://haodoo.net'}
+            {name: '好读', url: 'http://haodoo.net'},
+            {name: '四库全书', url: 'http://skqs.lib.ntnu.edu.tw/dragon'},
+            {name: '家谱库', url: 'https://jiapu.library.sh.cn/#/genealogyFullSearch?keywords={q}'}
         ];
+
+        let customSites = JSON.parse(localStorage.getItem('customSites') || '[]');
 
         function showNotification(message, duration = 3000) {
             const notification = document.getElementById('notification');
@@ -216,11 +295,16 @@
             }, duration);
         }
 
-        function createLinks(sites, containerId) {
+        function createLinks(sites, containerId, isCustom = false) {
             const container = document.getElementById(containerId);
-            sites.forEach(site => {
+            container.innerHTML = ''; // 清空现有内容
+            sites.forEach((site, index) => {
+                const linkContainer = document.createElement('div');
+                linkContainer.className = 'custom-site-item';
+                
                 const link = document.createElement('a');
                 link.className = 'search-link';
+                link.style.flex = '1';
                 link.textContent = site.name;
                 link.href = '#';
                 link.onclick = (e) => {
@@ -232,8 +316,57 @@
                         showNotification('请输入搜索关键词');
                     }
                 };
-                container.appendChild(link);
+                
+                linkContainer.appendChild(link);
+                
+                if (isCustom) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.textContent = '删除';
+                    deleteBtn.onclick = () => deleteCustomSite(index);
+                    linkContainer.appendChild(deleteBtn);
+                }
+                
+                container.appendChild(linkContainer);
             });
+        }
+
+        function addCustomSite() {
+            document.getElementById('customSiteModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('customSiteModal').style.display = 'none';
+        }
+
+        function saveCustomSite() {
+            const name = document.getElementById('siteName').value.trim();
+            const url = document.getElementById('siteUrl').value.trim();
+            
+            if (!name || !url) {
+                showNotification('请填写完整信息');
+                return;
+            }
+            
+            customSites.push({name, url});
+            localStorage.setItem('customSites', JSON.stringify(customSites));
+            
+            // 清空输入框
+            document.getElementById('siteName').value = '';
+            document.getElementById('siteUrl').value = '';
+            
+            // 刷新自定义链接列表
+            createLinks(customSites, 'customLinks', true);
+            
+            closeModal();
+            showNotification('添加成功');
+        }
+
+        function deleteCustomSite(index) {
+            customSites.splice(index, 1);
+            localStorage.setItem('customSites', JSON.stringify(customSites));
+            createLinks(customSites, 'customLinks', true);
+            showNotification('删除成功');
         }
 
         function batchOpen(containerId) {
@@ -250,22 +383,23 @@
                 case 'researchLinks': sites = researchSites; break;
                 case 'englishLinks': sites = englishSites; break;
                 case 'traditionalLinks': sites = traditionalSites; break;
+                case 'customLinks': sites = customSites; break;
                 default: return;
             }
 
-            // 使用延时依次打开窗口，避免被浏览器拦截
             sites.forEach((site, index) => {
-                if (site.url === 'https://www.jiumodiary.com' || 
-                    site.url === 'https://sci-hub.box' || 
-                    site.url === 'http://guoxue.er07.com' ||
-                    site.url === 'http://haodoo.net' ||
-                    site.url === 'https://pubscholar.cn') {
+                if (site.url.includes('jiumodiary.com') || 
+                    site.url.includes('sci-hub.box') || 
+                    site.url.includes('guoxue.er07.com') ||
+                    site.url.includes('haodoo.net') ||
+                    site.url.includes('pubscholar.cn') ||
+                    !site.url.includes('{q}')) {
                     window.open(site.url);
                 } else {
                     const url = site.url.replace('{q}', encodeURIComponent(query));
                     setTimeout(() => {
                         window.open(url);
-                    }, index * 300); // 每300ms打开一个新窗口
+                    }, index * 300);
                 }
             });
 
@@ -278,6 +412,7 @@
         createLinks(researchSites, 'researchLinks');
         createLinks(englishSites, 'englishLinks');
         createLinks(traditionalSites, 'traditionalLinks');
+        createLinks(customSites, 'customLinks', true);
 
         // 添加回车搜索功能
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
@@ -298,7 +433,6 @@
                 });
         });
     }
-</script>
-
+    </script>
 </body>
 </html>
