@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>丰川极速文搜</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .category {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .category-title {
+            font-weight: bold;
+            color: #444;
+            font-size: 16px;
+        }
+        .batch-open {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .batch-open:hover {
+            background: #45a049;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        .search-link {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+        }
+        .search-link:hover {
+            background: #e0e0e0;
+        }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .link-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .search-link {
+                font-size: 13px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>丰川极速文搜</h1>
+        <input type="text" id="searchInput" class="search-box" placeholder="请输入搜索关键词" autofocus>
+        
+        <div class="category">
+            <div class="category-header">
+                <div class="category-title">默认搜索</div>
+                <button class="batch-open" onclick="batchOpen('defaultLinks')">批量打开</button>
+            </div>
+            <div class="link-grid" id="defaultLinks"></div>
+        </div>
+        
+        <div class="category">
+            <div class="category-header">
+                <div class="category-title">综合搜索</div>
+                <button class="batch-open" onclick="batchOpen('generalLinks')">批量打开</button>
+            </div>
+            <div class="link-grid" id="generalLinks"></div>
+        </div>
+        
+        <div class="category">
+            <div class="category-header">
+                <div class="category-title">学术搜索</div>
+                <button class="batch-open" onclick="batchOpen('researchLinks')">批量打开</button>
+            </div>
+            <div class="link-grid" id="researchLinks"></div>
+        </div>
+        
+        <div class="category">
+            <div class="category-header">
+                <div class="category-title">外文搜索</div>
+                <button class="batch-open" onclick="batchOpen('englishLinks')">批量打开</button>
+            </div>
+            <div class="link-grid" id="englishLinks"></div>
+        </div>
+        
+        <div class="category">
+            <div class="category-header">
+                <div class="category-title">繁体/古籍</div>
+                <button class="batch-open" onclick="batchOpen('traditionalLinks')">批量打开</button>
+            </div>
+            <div class="link-grid" id="traditionalLinks"></div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        const defaultSites = [
+            {name: 'Z-Library', url: 'https://z-library.sk/s/{q}'},
+            {name: 'LibGen', url: 'http://libgen.li/index.php?req={q}'},
+            {name: 'Google', url: 'https://www.google.com/search?q={q}'},
+            {name: '百度', url: 'https://www.baidu.com/s?wd={q}'},
+            {name: 'Bing', url: 'https://cn.bing.com/search?q={q}'},
+            {name: '词典论坛', url: 'https://forum.freemdict.com/search?q={q}'},
+            {name: 'Panso', url: 'https://panso.pro/search?q={q}'},
+            {name: '度盘搜索', url: 'https://pan666.net/?q={q}'},
+            {name: '读秀', url: 'https://book.duxiu.com/search?sw={q}'},
+            {name: '鸠摩搜书', url: 'https://www.jiumodiary.com'},
+            {name: "Anna's Archive", url: 'https://annas-archive.org/search?q={q}'},
+            {name: 'B站', url: 'https://search.bilibili.com/all?keyword={q}'},
+            {name: '知乎', url: 'https://www.zhihu.com/search?q={q}'}
+        ];
+
+        const generalSites = [
+            {name: 'Gutenberg', url: 'https://www.gutenberg.org/ebooks/search/?query={q}'},
+            {name: 'Wislib', url: 'https://www.wislib.com/search?key={q}'},
+            {name: '白嫖图书馆', url: 'https://bk.hallowlib.org'},
+            {name: '小白盘', url: 'https://www.xiaobaipan.com/list-{q}AD.html'},
+            {name: '虫部落', url: 'https://www.google.com/search?sitesearch=chongbuluo.com&query={q}'}
+        ];
+
+        const researchSites = [
+            {name: 'Google Scholar', url: 'https://scholar.google.com/scholar?q={q}'},
+            {name: 'arXiv', url: 'https://arxiv.org/search/?query={q}'},
+            {name: '百度学术', url: 'https://xueshu.baidu.com/s?wd={q}'},
+            {name: 'CNKI', url: 'https://www.cnki.net/search.aspx?q={q}'},
+            {name: 'Sci-Hub', url: 'https://sci-hub.box'},
+            {name: '公众学术', url: 'https://pubscholar.cn'}
+        ];
+
+        const englishSites = [
+            {name: 'Google(EN)', url: 'https://www.google.com/search?q={q}&lr=lang_en'},
+            {name: 'Z-Library', url: 'https://z-library.sk/s/{q}'},
+            {name: 'LibGen', url: 'http://libgen.li/index.php?req={q}'},
+            {name: "Anna's Archive", url: 'https://annas-archive.org/search?q={q}'},
+            {name: 'PDF Drive', url: 'https://www.pdfdrive.com/search?q={q}'},
+            {name: 'Springer', url: 'https://link.springer.com/search?query={q}'}
+        ];
+
+        const traditionalSites = [
+            {name: '古籍馆', url: 'https://www.gujiguan.com/#/search?keyword={q}'},
+            {name: '书格', url: 'https://www.shuge.org/?s={q}'},
+            {name: '国学导航', url: 'http://guoxue.er07.com'},
+            {name: '台大图书馆', url: 'https://ntu.primo.exlibrisgroup.com/discovery/search?query=any,contains,{q}'},
+            {name: '好读', url: 'http://haodoo.net'}
+        ];
+
+        function showNotification(message, duration = 3000) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, duration);
+        }
+
+        function createLinks(sites, containerId) {
+            const container = document.getElementById(containerId);
+            sites.forEach(site => {
+                const link = document.createElement('a');
+                link.className = 'search-link';
+                link.textContent = site.name;
+                link.href = '#';
+                link.onclick = (e) => {
+                    e.preventDefault();
+                    const query = document.getElementById('searchInput').value;
+                    if (query) {
+                        window.open(site.url.replace('{q}', encodeURIComponent(query)));
+                    } else {
+                        showNotification('请输入搜索关键词');
+                    }
+                };
+                container.appendChild(link);
+            });
+        }
+
+        function batchOpen(containerId) {
+            const query = document.getElementById('searchInput').value;
+            if (!query) {
+                showNotification('请输入搜索关键词');
+                return;
+            }
+
+            let sites;
+            switch(containerId) {
+                case 'defaultLinks': sites = defaultSites; break;
+                case 'generalLinks': sites = generalSites; break;
+                case 'researchLinks': sites = researchSites; break;
+                case 'englishLinks': sites = englishSites; break;
+                case 'traditionalLinks': sites = traditionalSites; break;
+                default: return;
+            }
+
+            // 使用延时依次打开窗口，避免被浏览器拦截
+            sites.forEach((site, index) => {
+                if (site.url === 'https://www.jiumodiary.com' || 
+                    site.url === 'https://sci-hub.box' || 
+                    site.url === 'http://guoxue.er07.com' ||
+                    site.url === 'http://haodoo.net' ||
+                    site.url === 'https://pubscholar.cn') {
+                    window.open(site.url);
+                } else {
+                    const url = site.url.replace('{q}', encodeURIComponent(query));
+                    setTimeout(() => {
+                        window.open(url);
+                    }, index * 300); // 每300ms打开一个新窗口
+                }
+            });
+
+            showNotification(`正在打开${sites.length}个搜索结果，请允许弹出窗口`);
+        }
+
+        // 初始化所有链接
+        createLinks(defaultSites, 'defaultLinks');
+        createLinks(generalSites, 'generalLinks');
+        createLinks(researchSites, 'researchLinks');
+        createLinks(englishSites, 'englishLinks');
+        createLinks(traditionalSites, 'traditionalLinks');
+
+        // 添加回车搜索功能
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                batchOpen('defaultLinks');
+            }
+        });
+    </script>
+</body>
+</html>
