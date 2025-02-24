@@ -6,8 +6,8 @@
     <title>丰川极速文搜</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4CAF50">
-    <link rel="icon" type="image/png" sizes="192x192" href="/tgw-search/icon-192.png">
-    <link rel="apple-touch-icon" href="/tgw-search/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/book-search/icon-192.png">
+    <link rel="apple-touch-icon" href="/book-search/icon-192.png">
     <style>
         body {
             font-family: system-ui, sans-serif;
@@ -53,6 +53,22 @@
             color: #444;
             font-size: 16px;
         }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .site-checkbox {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            cursor: pointer;
+        }
         .batch-open {
             background: #4CAF50;
             color: white;
@@ -70,21 +86,23 @@
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 10px;
         }
-        .search-link {
+        .custom-site-item {
             background: #f0f0f0;
-            padding: 10px;
+            padding: 8px;
             border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-link {
+            flex: 1;
             text-decoration: none;
             color: #333;
             text-align: center;
             font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px;
         }
         .search-link:hover {
-            background: #e0e0e0;
+            color: #4CAF50;
         }
         .notification {
             position: fixed;
@@ -121,11 +139,6 @@
             gap: 10px;
             margin-top: 15px;
         }
-        .custom-site-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
         .delete-btn {
             background: #dc3545;
             color: white;
@@ -144,7 +157,6 @@
             }
             .search-link {
                 font-size: 13px;
-                padding: 8px;
             }
         }
     </style>
@@ -157,7 +169,14 @@
         <div class="category">
             <div class="category-header">
                 <div class="category-title">默认搜索</div>
-                <button class="batch-open" onclick="batchOpen('defaultLinks')">批量打开</button>
+                <div class="header-actions">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="site-checkbox" 
+                               onclick="toggleAll(this, 'defaultLinks')" id="defaultAll">
+                        <label for="defaultAll">全选</label>
+                    </div>
+                    <button class="batch-open" onclick="batchOpenSelected('defaultLinks')">打开选中</button>
+                </div>
             </div>
             <div class="link-grid" id="defaultLinks"></div>
         </div>
@@ -165,7 +184,14 @@
         <div class="category">
             <div class="category-header">
                 <div class="category-title">综合搜索</div>
-                <button class="batch-open" onclick="batchOpen('generalLinks')">批量打开</button>
+                <div class="header-actions">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="site-checkbox" 
+                               onclick="toggleAll(this, 'generalLinks')" id="generalAll">
+                        <label for="generalAll">全选</label>
+                    </div>
+                    <button class="batch-open" onclick="batchOpenSelected('generalLinks')">打开选中</button>
+                </div>
             </div>
             <div class="link-grid" id="generalLinks"></div>
         </div>
@@ -173,7 +199,14 @@
         <div class="category">
             <div class="category-header">
                 <div class="category-title">学术搜索</div>
-                <button class="batch-open" onclick="batchOpen('researchLinks')">批量打开</button>
+                <div class="header-actions">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="site-checkbox" 
+                               onclick="toggleAll(this, 'researchLinks')" id="researchAll">
+                        <label for="researchAll">全选</label>
+                    </div>
+                    <button class="batch-open" onclick="batchOpenSelected('researchLinks')">打开选中</button>
+                </div>
             </div>
             <div class="link-grid" id="researchLinks"></div>
         </div>
@@ -181,7 +214,14 @@
         <div class="category">
             <div class="category-header">
                 <div class="category-title">外文搜索</div>
-                <button class="batch-open" onclick="batchOpen('englishLinks')">批量打开</button>
+                <div class="header-actions">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="site-checkbox" 
+                               onclick="toggleAll(this, 'englishLinks')" id="englishAll">
+                        <label for="englishAll">全选</label>
+                    </div>
+                    <button class="batch-open" onclick="batchOpenSelected('englishLinks')">打开选中</button>
+                </div>
             </div>
             <div class="link-grid" id="englishLinks"></div>
         </div>
@@ -189,7 +229,14 @@
         <div class="category">
             <div class="category-header">
                 <div class="category-title">繁体/古籍</div>
-                <button class="batch-open" onclick="batchOpen('traditionalLinks')">批量打开</button>
+                <div class="header-actions">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="site-checkbox" 
+                               onclick="toggleAll(this, 'traditionalLinks')" id="traditionalAll">
+                        <label for="traditionalAll">全选</label>
+                    </div>
+                    <button class="batch-open" onclick="batchOpenSelected('traditionalLinks')">打开选中</button>
+                </div>
             </div>
             <div class="link-grid" id="traditionalLinks"></div>
         </div>
@@ -197,7 +244,15 @@
         <div class="category">
             <div class="category-header">
                 <div class="category-title">自定义搜索源</div>
-                <button class="batch-open" onclick="addCustomSite()">添加网站</button>
+                <div class="header-actions">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="site-checkbox" 
+                               onclick="toggleAll(this, 'customLinks')" id="customAll">
+                        <label for="customAll">全选</label>
+                    </div>
+                    <button class="batch-open" onclick="batchOpenSelected('customLinks')">打开选中</button>
+                    <button class="batch-open" onclick="addCustomSite()">添加网站</button>
+                </div>
             </div>
             <div class="link-grid" id="customLinks"></div>
         </div>
@@ -205,7 +260,6 @@
 
     <div id="notification" class="notification"></div>
 
-    <!-- 添加自定义搜索源的弹窗 -->
     <div id="customSiteModal" class="modal">
         <div class="modal-content">
             <h3>添加自定义搜索源</h3>
@@ -217,7 +271,6 @@
             </div>
         </div>
     </div>
-
     <script>
         const defaultSites = [
             {name: 'Z-Library', url: 'https://z-library.sk/s/{q}'},
@@ -302,9 +355,14 @@
                 const linkContainer = document.createElement('div');
                 linkContainer.className = 'custom-site-item';
                 
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'site-checkbox';
+                checkbox.dataset.index = index;
+                linkContainer.appendChild(checkbox);
+                
                 const link = document.createElement('a');
                 link.className = 'search-link';
-                link.style.flex = '1';
                 link.textContent = site.name;
                 link.href = '#';
                 link.onclick = (e) => {
@@ -329,6 +387,12 @@
                 
                 container.appendChild(linkContainer);
             });
+        }
+
+        function toggleAll(checkbox, containerId) {
+            const container = document.getElementById(containerId);
+            const checkboxes = container.querySelectorAll('.site-checkbox');
+            checkboxes.forEach(box => box.checked = checkbox.checked);
         }
 
         function addCustomSite() {
@@ -369,7 +433,7 @@
             showNotification('删除成功');
         }
 
-        function batchOpen(containerId) {
+        function batchOpenSelected(containerId) {
             const query = document.getElementById('searchInput').value;
             if (!query) {
                 showNotification('请输入搜索关键词');
@@ -387,23 +451,35 @@
                 default: return;
             }
 
-            sites.forEach((site, index) => {
-                if (site.url.includes('jiumodiary.com') || 
-                    site.url.includes('sci-hub.box') || 
-                    site.url.includes('guoxue.er07.com') ||
-                    site.url.includes('haodoo.net') ||
-                    site.url.includes('pubscholar.cn') ||
-                    !site.url.includes('{q}')) {
-                    window.open(site.url);
-                } else {
-                    const url = site.url.replace('{q}', encodeURIComponent(query));
-                    setTimeout(() => {
-                        window.open(url);
-                    }, index * 300);
+            const container = document.getElementById(containerId);
+            const checkboxes = container.querySelectorAll('.site-checkbox');
+            let selectedCount = 0;
+
+            checkboxes.forEach((checkbox, index) => {
+                if (checkbox.checked) {
+                    selectedCount++;
+                    const site = sites[index];
+                    if (site.url.includes('jiumodiary.com') || 
+                        site.url.includes('sci-hub.box') || 
+                        site.url.includes('guoxue.er07.com') ||
+                        site.url.includes('haodoo.net') ||
+                        site.url.includes('pubscholar.cn') ||
+                        !site.url.includes('{q}')) {
+                        window.open(site.url);
+                    } else {
+                        const url = site.url.replace('{q}', encodeURIComponent(query));
+                        setTimeout(() => {
+                            window.open(url);
+                        }, selectedCount * 300);
+                    }
                 }
             });
 
-            showNotification(`正在打开${sites.length}个搜索结果，请允许弹出窗口`);
+            if (selectedCount === 0) {
+                showNotification('请至少选择一个网站');
+            } else {
+                showNotification(`正在打开${selectedCount}个搜索结果，请允许弹出窗口`);
+            }
         }
 
         // 初始化所有链接
@@ -417,7 +493,7 @@
         // 添加回车搜索功能
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                batchOpen('defaultLinks');
+                batchOpenSelected('defaultLinks');
             }
         });
     </script>
