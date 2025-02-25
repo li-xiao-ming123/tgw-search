@@ -1,4 +1,4 @@
-const CACHE_NAME = 'book-search-v2'; // 更新版本号
+const CACHE_NAME = 'tgw-search-v1'; // 更新版本号
 const urlsToCache = [
   '/tgw-search/',
   '/tgw-search/index.html',
