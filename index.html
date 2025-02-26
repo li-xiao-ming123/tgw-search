@@ -44,6 +44,8 @@
     />
 
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/floating-button.css" />
+    <link rel="stylesheet" href="css/live2d-chat.css" />
   </head>
   <body>
     <div class="container">
@@ -260,6 +262,7 @@
     <script src="js/live2d.js"></script>
     <script src="js/LAppDefine.js"></script>
     <canvas class="live2d" id="live2d" width="300" height="800"></canvas>
+    <!-- default: 300*800 -->
     <!-- Live2D对话框 -->
     <div id="live2d-chat-container" class="live2d-chat-container">
       <div class="live2d-chat-bubble">
@@ -283,12 +286,88 @@
       .live2d {
         position: fixed;
         bottom: -150px;
-        left: -50px;
+        left: -30px;
+      }
+
+      /* 针对移动设备的样式 */
+      @media (max-width: 768px) {
+        .live2d {
+          bottom: 0;
+          left: -30px; /* 调整在移动设备上的位置 */
+        }
       }
     </style>
+
     <script>
-      loadlive2d("live2d", "model/sakiko/341_jh_school_winter-2023.model.json");
+      // 检测是否为移动设备
+      function isMobileDevice() {
+        return (
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          ) || window.innerWidth <= 768
+        );
+      }
+
+      // 调整canvas大小并加载模型
+      function initLive2D() {
+        const live2dCanvas = document.getElementById("live2d");
+
+        if (isMobileDevice()) {
+          // 移动设备上使用较小的尺寸
+          live2dCanvas.width = 180; // 更小的宽度
+          live2dCanvas.height = 260; // 更小的高度
+          console.log(
+            "设置移动设备尺寸:",
+            live2dCanvas.width,
+            live2dCanvas.height
+          );
+        } else {
+          // 桌面设备上使用原始尺寸
+          live2dCanvas.width = 300;
+          live2dCanvas.height = 800;
+          console.log(
+            "设置桌面设备尺寸:",
+            live2dCanvas.width,
+            live2dCanvas.height
+          );
+        }
+
+        // 加载Live2D模型
+        loadlive2d(
+          "live2d",
+          "model/sakiko/341_jh_school_winter-2023.model.json"
+        );
+      }
+
+      // 确保DOM加载完成后初始化
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initLive2D);
+      } else {
+        initLive2D();
+      }
+
+      // 添加防抖函数
+      function debounce(func, wait) {
+        let timeout;
+        return function () {
+          const context = this;
+          const args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+      }
+
+      // 使用防抖处理窗口大小变化
+      window.addEventListener(
+        "resize",
+        debounce(function () {
+          initLive2D();
+        }, 500)
+      );
     </script>
+    <!-- <script>
+      loadlive2d("live2d", "model/sakiko/341_jh_school_winter-2023.model.json");
+    </script> -->
     <script src="js/live2d-kimi-chat.js"></script>
   </body>
 </html>
