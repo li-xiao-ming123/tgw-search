@@ -253,6 +253,40 @@ function batchOpenSelected(containerId) {
   }
 }
 
+/* 文叔叔悬浮传文件按钮功能 */
+(function () {
+  // 等待 DOM 加载完成
+  function initWenshushuButton() {
+    const wenshushuBtn = document.getElementById("wenshushu-float-btn");
+
+    if (wenshushuBtn) {
+      // 点击事件处理
+      wenshushuBtn.addEventListener("click", function () {
+        // 打开文叔叔网站
+        window.open("https://www.wenshushu.cn/", "_blank");
+      });
+
+      // 添加触摸设备支持
+      wenshushuBtn.addEventListener("touchend", function (e) {
+        e.preventDefault();
+        window.open("https://www.wenshushu.cn/", "_blank");
+      });
+
+      // 显示按钮的动画效果
+      setTimeout(() => {
+        wenshushuBtn.style.opacity = "1";
+      }, 500);
+    }
+  }
+
+  // 如果 DOM 已加载完成，直接初始化
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWenshushuButton);
+  } else {
+    initWenshushuButton();
+  }
+})();
+
 // 初始化所有链接
 document.addEventListener("DOMContentLoaded", function () {
   createLinks(defaultSites, "defaultLinks");
