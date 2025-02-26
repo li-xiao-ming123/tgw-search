@@ -1,0 +1,15 @@
+/* 调整模型显示样式 */
+#waifu {
+  bottom: -20px;
+  right: 0;
+  line-height: 0;
+  margin-bottom: -30px;
+  z-index: 999;
+}
+
+#live2d {
+  height: 500px;
+  width: 280px;
+  position: relative;
+  z-index: 1;
+}
