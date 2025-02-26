@@ -255,31 +255,20 @@
       <div class="tooltip">跳转到文叔叔传文件（可不登录）</div>
     </div>
     <script src="js/main.js"></script>
-    <!-- Live2D Widget 脚本 -->
-    <!-- 直接引入核心库文件 -->
-    <script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/live2d.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/waifu.css"
-    />
 
-    <!-- 添加live2d容器 -->
-    <div id="waifu">
-      <div id="waifu-tips"></div>
-      <canvas id="live2d" width="280" height="500"></canvas>
-      <div id="waifu-tool">
-        <span class="fa fa-lg fa-comment"></span>
-        <span class="fa fa-lg fa-paper-plane"></span>
-        <span class="fa fa-lg fa-user-circle"></span>
-        <span class="fa fa-lg fa-street-view"></span>
-        <span class="fa fa-lg fa-camera-retro"></span>
-        <span class="fa fa-lg fa-info-circle"></span>
-        <span class="fa fa-lg fa-times"></span>
-      </div>
-    </div>
-
-    <link rel="stylesheet" href="css/live2d.css" />
-
+    <!--添加live2d-->
     <script src="js/live2d.js"></script>
+    <script src="js/LAppDefine.js"></script>
+    <canvas class="live2d" id="live2d" width="300" height="800"></canvas>
+    <style>
+      .live2d {
+        position: fixed;
+        bottom: -150px;
+        left: -50px;
+      }
+    </style>
+    <script>
+      loadlive2d("live2d", "model/sakiko/341_jh_school_winter-2023.model.json");
+    </script>
   </body>
 </html>
