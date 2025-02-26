@@ -320,7 +320,7 @@ h1 {
   }
 }
 
-/* 文叔叔悬浮按钮样式 */
+/* 文叔叔悬浮按钮样式 - 添加到您的 CSS 文件中 */
 .float-btn {
   position: fixed;
   bottom: 80px;
@@ -339,6 +339,11 @@ h1 {
   z-index: 1000;
   transition: all 0.3s ease;
   opacity: 0; /* 初始隐藏，通过 JS 显示 */
+  -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
+  user-select: none; /* 防止文本选择 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .float-btn:hover {
@@ -377,6 +382,7 @@ h1 {
   visibility: hidden;
   opacity: 0;
   transition: all 0.3s ease;
+  pointer-events: none; /* 确保tooltip不会干扰点击 */
 }
 
 .float-btn .tooltip:after {
@@ -390,9 +396,22 @@ h1 {
   border-color: transparent transparent transparent rgba(0, 0, 0, 0.8);
 }
 
-.float-btn:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
+/* PC端显示tooltip */
+@media (hover: hover) and (pointer: fine) {
+  .float-btn:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/* 平板设备样式调整 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .float-btn {
+    bottom: 70px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+  }
 }
 
 /* 移动设备适配 */
@@ -410,5 +429,28 @@ h1 {
 
   .float-btn-text {
     font-size: 10px;
+  }
+}
+
+/* 确保在触摸设备上有更好的点击区域 */
+@media (pointer: coarse) {
+  .float-btn {
+    min-width: 50px;
+    min-height: 50px;
+  }
+}
+
+/* 处理横屏模式 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .float-btn {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+/* 高DPI屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .float-btn-icon svg {
+    stroke-width: 1.5px; /* 更细的线条在高DPI屏幕上看起来更清晰 */
   }
 }

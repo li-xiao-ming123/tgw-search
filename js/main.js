@@ -260,22 +260,81 @@ function batchOpenSelected(containerId) {
     const wenshushuBtn = document.getElementById("wenshushu-float-btn");
 
     if (wenshushuBtn) {
-      // 点击事件处理
-      wenshushuBtn.addEventListener("click", function () {
-        // 打开文叔叔网站
-        window.open("https://www.wenshushu.cn/", "_blank");
-      });
+      // 检测设备类型
+      const isTouchDevice =
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0;
 
-      // 添加触摸设备支持
-      wenshushuBtn.addEventListener("touchend", function (e) {
+      // 点击事件处理 - PC端
+      wenshushuBtn.addEventListener("click", function (e) {
         e.preventDefault();
         window.open("https://www.wenshushu.cn/", "_blank");
       });
+
+      // 触摸事件处理 - 移动端和平板
+      if (isTouchDevice) {
+        // 防止触摸设备上的双重触发
+        wenshushuBtn.addEventListener("touchend", function (e) {
+          e.preventDefault();
+          window.open("https://www.wenshushu.cn/", "_blank");
+        });
+
+        // 在触摸设备上显示/隐藏提示
+        let touchTimer;
+        wenshushuBtn.addEventListener("touchstart", function (e) {
+          const tooltip = this.querySelector(".tooltip");
+          if (tooltip) {
+            clearTimeout(touchTimer);
+            tooltip.style.visibility = "visible";
+            tooltip.style.opacity = "1";
+
+            touchTimer = setTimeout(() => {
+              tooltip.style.visibility = "hidden";
+              tooltip.style.opacity = "0";
+            }, 1500);
+          }
+        });
+      }
+
+      // 根据设备类型调整样式
+      if (isTouchDevice) {
+        wenshushuBtn.classList.add("touch-device");
+      } else {
+        wenshushuBtn.classList.add("mouse-device");
+      }
+
+      // 检测是否在iframe中，调整z-index
+      if (window !== window.top) {
+        wenshushuBtn.style.zIndex = "2147483647"; // 最高z-index值
+      }
 
       // 显示按钮的动画效果
       setTimeout(() => {
         wenshushuBtn.style.opacity = "1";
       }, 500);
+
+      // 处理滚动位置调整
+      let scrollTimer;
+      window.addEventListener("scroll", function () {
+        clearTimeout(scrollTimer);
+
+        if (wenshushuBtn.classList.contains("float-btn-hidden")) {
+          return;
+        }
+
+        wenshushuBtn.classList.add("float-btn-scrolling");
+
+        scrollTimer = setTimeout(() => {
+          wenshushuBtn.classList.remove("float-btn-scrolling");
+        }, 200);
+      });
+
+      // 处理窗口大小变化
+      window.addEventListener("resize", function () {
+        // 可以在这里添加响应窗口大小变化的逻辑
+        // 例如，根据窗口大小调整按钮位置
+      });
     }
   }
 
