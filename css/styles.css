@@ -454,3 +454,171 @@ h1 {
     stroke-width: 1.5px; /* 更细的线条在高DPI屏幕上看起来更清晰 */
   }
 }
+
+.live2d-chat-container {
+  position: fixed;
+  bottom: 400px;
+  left: 5px;
+  z-index: 10000;
+  display: none; /* 初始状态为隐藏 */
+}
+
+.live2d-chat-bubble {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  min-width: 250px;
+  max-width: 350px;
+}
+
+.live2d-chat-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
+}
+
+#live2d-chat-message {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.live2d-chat-input-container {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+#live2d-chat-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+#live2d-chat-submit {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#live2d-chat-submit:hover {
+  background: #45a049;
+}
+
+.live2d-chat-response {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.live2d-chat-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 24px;
+  height: 24px;
+  background: #ff5252;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 22px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 用户消息样式 */
+.user-message {
+  background: #e1f5fe;
+  padding: 10px 15px;
+  border-radius: 18px;
+  margin: 10px;
+  max-width: 80%;
+  align-self: flex-end;
+  word-wrap: break-word;
+}
+
+/* AI响应样式 */
+.ai-response {
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px;
+  border-left: 4px solid #4caf50;
+}
+
+.ai-response-header {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 16px;
+}
+
+.ai-response-content {
+  line-height: 1.5;
+}
+
+/* 书籍信息样式 */
+.book-title {
+  font-size: 18px;
+  margin: 10px 0 5px 0;
+  color: #1a73e8;
+}
+
+.book-author,
+.book-publisher,
+.book-year,
+.book-isbn,
+.book-pages,
+.book-category {
+  margin: 5px 0;
+}
+
+.book-intro {
+  margin: 10px 0;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 5px;
+  font-style: italic;
+}
+
+/* 电子书来源样式 */
+.ebook-sources {
+  margin-top: 15px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
+}
+
+.ebook-sources h3 {
+  color: #4caf50;
+  margin-bottom: 10px;
+}
+
+.ebook-sources ol {
+  padding-left: 20px;
+}
+
+.ebook-sources li {
+  margin: 8px 0;
+}
+
+/* 链接样式 */
+.ai-response-content a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.ai-response-content a:hover {
+  text-decoration: underline;
+}
