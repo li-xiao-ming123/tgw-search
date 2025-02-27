@@ -2,15 +2,15 @@
 const defaultSites = [
   { name: "Z-Library", url: "https://z-library.sk/s/{q}" },
   { name: "LibGen", url: "http://libgen.li/index.php?req={q}" },
+  { name: "Anna's Archive", url: "https://annas-archive.org/search?q={q}" },
   { name: "Google", url: "https://www.google.com/search?q={q}" },
-  { name: "百度", url: "https://www.baidu.com/s?wd={q}" },
-  { name: "Bing", url: "https://cn.bing.com/search?q={q}" },
+  { name: "Wislib", url: "https://www.wislib.com/search?key={q}" },
+  { name: "Hallowlib", url: "https://bk.hallowlib.org" },
   { name: "词典论坛", url: "https://forum.freemdict.com/search?q={q}" },
   { name: "Panso", url: "https://panso.pro/search?q={q}" },
   { name: "阿里小站", url: "https://pan666.net/?q={q}" },
-  { name: "读秀", url: "https://book.duxiu.com/search?sw={q}" },
+  { name: "读秀", url: "https://book.duxiu.com/search?sw={q}&ecode=utf-8" },
   { name: "鸠摩搜书", url: "https://www.jiumodiary.com" },
-  { name: "Anna's Archive", url: "https://annas-archive.org/search?q={q}" },
   { name: "B站", url: "https://search.bilibili.com/all?keyword={q}" },
   { name: "知乎", url: "https://www.zhihu.com/search?q={q}" },
 ];
@@ -20,8 +20,7 @@ const generalSites = [
     name: "Gutenberg",
     url: "https://www.gutenberg.org/ebooks/search/?query={q}",
   },
-  { name: "Wislib", url: "https://www.wislib.com/search?key={q}" },
-  { name: "Hallowlib", url: "https://bk.hallowlib.org" },
+
   { name: "小白盘", url: "https://www.xiaobaipan.com/list-{q}AD.html" },
   {
     name: "虫部落",
@@ -36,6 +35,8 @@ const generalSites = [
     name: "LOC",
     url: "https://www.loc.gov/search/?in=partof%3Aworld+digital+library&q={q}",
   },
+  { name: "百度", url: "https://www.baidu.com/s?wd={q}" },
+  { name: "Bing", url: "https://cn.bing.com/search?q={q}" },
 ];
 
 const researchSites = [
@@ -58,7 +59,7 @@ const researchSites = [
 ];
 
 const englishSites = [
-  { name: "PDF Drive", url: "https://www.pdfdrive.com/search?q={q}" },
+
   { name: "Springer", url: "https://link.springer.com/search?query={q}" },
   {
     name: "iHeart",
