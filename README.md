@@ -1,7 +1,7 @@
 # TGWSearch（丰川极速文搜）
 
 A streamlined workflow solution for searching e-book. \
-https://li-xiao-ming123.github.io/tgw-search\
+https://li-xiao-ming123.github.io/tgw-search \
 知道没人看，但我还是随便写个
 
 ## Key Features
