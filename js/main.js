@@ -277,7 +277,7 @@ function batchOpenSelected(containerId) {
         // 防止触摸设备上的双重触发
         fileTransferBtn.addEventListener("touchend", function (e) {
           e.preventDefault();
-          window.open("https:https://musetransfer.com/m", "_blank");
+          window.open("https://musetransfer.com/m", "_blank");
         });
 
         // 在触摸设备上显示/隐藏提示
