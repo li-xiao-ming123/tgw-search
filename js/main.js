@@ -7,6 +7,7 @@ const defaultSites = [
   { name: "Wislib", url: "https://www.wislib.com/search?key={q}" },
   { name: "Hallowlib", url: "https://bk.hallowlib.org" },
   { name: "词典论坛", url: "https://forum.freemdict.com/search?q={q}" },
+  { name: "PDF Drive", url: "https://www.pdfdrive.com/search?q={q}" },
   { name: "Panso", url: "https://panso.pro/search?q={q}" },
   { name: "阿里小站", url: "https://pan666.net/?q={q}" },
   { name: "读秀", url: "https://book.duxiu.com/search?sw={q}&ecode=utf-8" },
