@@ -257,7 +257,7 @@ function batchOpenSelected(containerId) {
 (function () {
   // 等待 DOM 加载完成
   function initFloatingButton() {
-    const fileTransferBtn = document.getElementById("wenshushu-float-btn");
+    const fileTransferBtn = document.getElementById("filetransfer-float-btn");
 
     if (fileTransferBtn) {
       // 检测设备类型
