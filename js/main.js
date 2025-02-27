@@ -256,10 +256,10 @@ function batchOpenSelected(containerId) {
 /* 文叔叔悬浮传文件按钮功能 */
 (function () {
   // 等待 DOM 加载完成
-  function initWenshushuButton() {
-    const wenshushuBtn = document.getElementById("wenshushu-float-btn");
+  function initFloatingButton() {
+    const fileTransferBtn = document.getElementById("wenshushu-float-btn");
 
-    if (wenshushuBtn) {
+    if (fileTransferBtn) {
       // 检测设备类型
       const isTouchDevice =
         "ontouchstart" in window ||
@@ -267,22 +267,22 @@ function batchOpenSelected(containerId) {
         navigator.msMaxTouchPoints > 0;
 
       // 点击事件处理 - PC端
-      wenshushuBtn.addEventListener("click", function (e) {
+      fileTransferBtn.addEventListener("click", function (e) {
         e.preventDefault();
-        window.open("https://www.wenshushu.cn/", "_blank");
+        window.open("https://musetransfer.com/m", "_blank");
       });
 
       // 触摸事件处理 - 移动端和平板
       if (isTouchDevice) {
         // 防止触摸设备上的双重触发
-        wenshushuBtn.addEventListener("touchend", function (e) {
+        fileTransferBtn.addEventListener("touchend", function (e) {
           e.preventDefault();
-          window.open("https://www.wenshushu.cn/", "_blank");
+          window.open("https:https://musetransfer.com/m", "_blank");
         });
 
         // 在触摸设备上显示/隐藏提示
         let touchTimer;
-        wenshushuBtn.addEventListener("touchstart", function (e) {
+        fileTransferBtn.addEventListener("touchstart", function (e) {
           const tooltip = this.querySelector(".tooltip");
           if (tooltip) {
             clearTimeout(touchTimer);
@@ -299,19 +299,19 @@ function batchOpenSelected(containerId) {
 
       // 根据设备类型调整样式
       if (isTouchDevice) {
-        wenshushuBtn.classList.add("touch-device");
+        fileTransferBtn.classList.add("touch-device");
       } else {
-        wenshushuBtn.classList.add("mouse-device");
+        fileTransfer.classList.add("mouse-device");
       }
 
       // 检测是否在iframe中，调整z-index
       if (window !== window.top) {
-        wenshushuBtn.style.zIndex = "2147483647"; // 最高z-index值
+        fileTransferBtn.style.zIndex = "2147483647"; // 最高z-index值
       }
 
       // 显示按钮的动画效果
       setTimeout(() => {
-        wenshushuBtn.style.opacity = "1";
+        fileTransferBtn.style.opacity = "1";
       }, 500);
 
       // 处理滚动位置调整
@@ -319,14 +319,14 @@ function batchOpenSelected(containerId) {
       window.addEventListener("scroll", function () {
         clearTimeout(scrollTimer);
 
-        if (wenshushuBtn.classList.contains("float-btn-hidden")) {
+        if (fileTransferBtn.classList.contains("float-btn-hidden")) {
           return;
         }
 
-        wenshushuBtn.classList.add("float-btn-scrolling");
+        fileTransferBtn.classList.add("float-btn-scrolling");
 
         scrollTimer = setTimeout(() => {
-          wenshushuBtn.classList.remove("float-btn-scrolling");
+          fileTransfer.classList.remove("float-btn-scrolling");
         }, 200);
       });
 
@@ -340,9 +340,9 @@ function batchOpenSelected(containerId) {
 
   // 如果 DOM 已加载完成，直接初始化
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initWenshushuButton);
+    document.addEventListener("DOMContentLoaded", initFloatingButton);
   } else {
-    initWenshushuButton();
+    initFloatingButton();
   }
 })();
 
