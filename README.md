@@ -12,7 +12,7 @@ https://li-xiao-ming123.github.io/tgw-search \
 - Category-based filtering system with multi-select capability
 
 ### File Transfer Integration
-- Integration with Wenshushu file transfer service
+- Integration with file transfer service
 - Convenient floating action button for quick file sharing
 
 ### AI-Powered Assistant
