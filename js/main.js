@@ -43,7 +43,6 @@ const generalSites = [
 const researchSites = [
   { name: "Google Scholar", url: "https://scholar.google.com/scholar?q={q}" },
   { name: "arXiv", url: "https://arxiv.org/search/?query={q}" },
-  { name: "百度学术", url: "https://xueshu.baidu.com/s?wd={q}" },
   { name: "CNKI", url: "https://www.cnki.net/search.aspx?q={q}" },
   { name: "Sci-Hub", url: "https://sci-hub.box" },
   { name: "公众学术", url: "https://pubscholar.cn" },
